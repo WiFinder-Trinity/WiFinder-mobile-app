@@ -1,7 +1,0 @@
-{
-  "name": "WiFinder",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}
