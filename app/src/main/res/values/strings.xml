@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WiFinder Android</string>
+    <string name="title_activity_hotspots_map">Hotspots map</string>
+</resources>
