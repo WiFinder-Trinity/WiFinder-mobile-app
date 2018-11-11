@@ -1,4 +1,4 @@
-package fr.wifinder_trinity.wifinderandroid
+package fr.wifinder.wifinderandroid.activities
 
 import android.annotation.SuppressLint
 import android.location.Location
@@ -17,11 +17,12 @@ import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import com.google.android.gms.maps.model.MarkerOptions
+import fr.wifinder_trinity.wifinderandroid.R
 
 class HotspotsMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val loggingTag = "HotspotsMapActivity"
-    private val DEFAULT_ZOOM = 15
+    private val defaultZoom = 15
     private val mDefaultLocation = LatLng(-34.0, 151.0) // It's Sydney
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -84,7 +85,7 @@ class HotspotsMapActivity : AppCompatActivity(), OnMapReadyCallback {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true
                 }
             }
@@ -122,11 +123,11 @@ class HotspotsMapActivity : AppCompatActivity(), OnMapReadyCallback {
                     Log.e(loggingTag, location.toString())
                     if (location != null) {
                         val latLng = LatLng(location!!.latitude, location!!.longitude)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM.toFloat()))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, defaultZoom.toFloat()))
                         mMap.addMarker(MarkerOptions().position(latLng).title("My position"))
                     } else {
                         Log.d(loggingTag, "Current location is null. Using defaults.")
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM.toFloat()))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, defaultZoom.toFloat()))
                         mMap.uiSettings.isMyLocationButtonEnabled = false
                     }
                 }
