@@ -14,22 +14,19 @@ import java.lang.ref.WeakReference
 
 class HotspotsListActivity : AppCompatActivity() {
 
-    private var nbClick = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotspots_list)
-        button.setOnClickListener {
-            nbClick++
-            //NetworkTask(this).execute(2)
-        }
         webview!!.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 view?.loadUrl(url)
                 return true
             }
         }
-        webview!!.loadUrl("https://www.google.fr/")
+        button.setOnClickListener {
+            webview!!.loadUrl("http://10.0.2.2:8080/test/" + editText.text)
+            //NetworkTask(this).execute(2)
+        }
     }
 
     /*companion object {
