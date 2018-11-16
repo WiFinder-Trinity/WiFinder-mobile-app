@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.wifinder_trinity.wifinderandroid">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -15,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -28,11 +32,15 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".HotspotsMapActivity"
+            android:name="fr.wifinder.wifinderandroid.activities.HotspotsMapActivity"
             android:label="@string/title_activity_hotspots_map">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
+        </activity>
+        <activity
+            android:name="fr.wifinder.wifinderandroid.activities.HotspotsListActivity"
+            android:label="@string/title_activity_hotspots_list">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

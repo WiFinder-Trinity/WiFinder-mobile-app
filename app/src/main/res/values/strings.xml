@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">WiFinder Android</string>
+    <string name="app_name">WiFinder</string>
     <string name="title_activity_hotspots_map">Hotspots map</string>
+    <string name="title_activity_hotspots_list">Hotspots list</string>
+    <string name="map">Go!</string>
 </resources>
