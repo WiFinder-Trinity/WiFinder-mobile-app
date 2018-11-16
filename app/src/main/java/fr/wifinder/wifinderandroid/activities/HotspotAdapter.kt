@@ -22,7 +22,7 @@ class HotspotAdapter (private val hotspots: List<ScanResult>) : RecyclerView.Ada
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val pair = Pair(hotspots[position].BSSID, hotspots[position].SSID)
+        val pair = Pair(hotspots[position].SSID, hotspots[position].BSSID)
         holder.display(pair)
     }
 

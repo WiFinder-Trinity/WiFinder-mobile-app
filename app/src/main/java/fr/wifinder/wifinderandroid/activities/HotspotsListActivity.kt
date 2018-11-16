@@ -33,9 +33,9 @@ class HotspotsListActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
             if (!success) {
-                textView.text = "Failure: " + Date().toString() + wifiManager.scanResults.size.toString() +" hotspots"
+                textView.text = "Failure [" + Date().toString() + "]: " +wifiManager.scanResults.size.toString() +" hotspots"
             } else{
-                textView.text = "Success:" +Date().toString() +wifiManager.scanResults.size.toString()+ "hotspots"
+                textView.text = "Success [" +Date().toString() + "]: " + wifiManager.scanResults.size.toString()+ " hotspots"
             }
             // TODO: reload hotspots list
         }
