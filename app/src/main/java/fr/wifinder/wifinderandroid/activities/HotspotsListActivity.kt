@@ -4,40 +4,47 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import fr.wifinder.wifinderandroid.services.PermissionsService
-import fr.wifinder_trinity.wifinderandroid.R
-import kotlinx.android.synthetic.main.activity_hotspots_list.*
+import android.support.v7.app.AppCompatActivity
+import android.widget.*
+import fr.wifinder.wifinderandroid.R
 import java.util.*
+import java.util.logging.Logger
+
 
 /* TODO: Documentation officielle https://developer.android.com/guide/topics/connectivity/wifi-scan#kotlin*/
 class HotspotsListActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
-
-    private val ps = PermissionsService()
-
     private lateinit var wifiManager: WifiManager
-    private var permissionsGranted = false
+    private lateinit var locationManager: LocationManager
+    private lateinit var textView: TextView
+    private lateinit var listView: ListView
+    private lateinit var scanButton: Button
+    private lateinit var findButton: Button
+
+    private val logger = Logger.getLogger(HotspotsListActivity::class.java.name)
+
+    private var size = 10
+    private lateinit var scanResults: List<ScanResult>
+    private val scanNames = arrayListOf<String>()
+
+    private lateinit var adapter: ArrayAdapter<String>
 
     private val wifiScanReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
-            if (!success) {
-                textView.text = "Failure [" + Date().toString() + "]: " +wifiManager.scanResults.size.toString() +" hotspots"
-            } else{
-                textView.text = "Success [" +Date().toString() + "]: " + wifiManager.scanResults.size.toString()+ " hotspots"
+            scanResults = wifiManager.scanResults
+            unregisterReceiver(this)
+            size = scanResults.size
+
+            logger.info("wifi scanner received information !")
+            textView.text = Date().toString() + " : got " + size.toString() + " wifi Hotspots"
+
+            for (scanResult in scanResults) {
+                scanNames.add(scanResult.BSSID + " : " + scanResult.SSID + " | " + scanResult.level.toString() + "dB")
+                adapter.notifyDataSetChanged()
             }
-            // TODO: reload hotspots list
         }
     }
 
@@ -45,60 +52,48 @@ class HotspotsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotspots_list)
 
-        permissionsGranted = ps.getHotspotsListPermission(this)
-        if(permissionsGranted) {
-            wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val intentFilter = IntentFilter()
-            intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-            baseContext.registerReceiver(wifiScanReceiver, intentFilter)
-            wifiManager.startScan()
+        //set Text view
+        textView = findViewById(R.id.textInfo)
+        textView.text = "Application starting ...."
 
-            textView.text = "INIT: "+ wifiManager.scanResults.size.toString()
+        //set List view
+        listView = findViewById(R.id.wifiList)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, scanNames)
+        listView.adapter = adapter
 
-            viewManager = LinearLayoutManager(this)
-            viewAdapter = HotspotAdapter(wifiManager.scanResults)
-            recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
-                // use this setting to improve performance if you know that changes
-                // in content do not change the layout size of the RecyclerView
-                /* setHasFixedSize(true) */
-                layoutManager = viewManager
-                adapter = viewAdapter
-            }
+        //set Scan Button
+        scanButton = findViewById(R.id.scanBtn)
+        scanButton.setOnClickListener { scanWifi() }
+
+        //set Find Button
+        findButton = findViewById(R.id.findBtn)
+        findButton.setOnClickListener { callFindService() }
+
+        //set Managers
+        wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        locationManager = applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        if (!wifiManager.isWifiEnabled) {
+            Toast.makeText(this, "WiFi is disabled ... We need to enable it", Toast.LENGTH_LONG).show()
+            wifiManager.isWifiEnabled = true
         }
+
+        scanWifi()
     }
 
+    fun scanWifi() {
+        scanNames.clear()
+        registerReceiver(wifiScanReceiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+        Toast.makeText(this, "Scanning Wifi ....", Toast.LENGTH_SHORT).show()
+        val success = wifiManager.startScan()
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
-        permissionsGranted = false
-        when (requestCode) {
-            1 -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionsGranted = true
-                }
-            }
-        }
+        if (!success)
+            Toast.makeText(this, "Scanning Failed :'(", Toast.LENGTH_SHORT).show()
+        else
+            Toast.makeText(this, "Scanning Succeed ;)", Toast.LENGTH_SHORT).show()
     }
 
-        /*companion object {
+    fun callFindService() {
 
-            class NetworkTask internal constructor(context: HotspotsListActivity) : AsyncTask<Int, Void, String>(){
-
-                private var api: CrowdsensingControllerApi = CrowdsensingControllerApi()
-                private val activityReference: WeakReference<HotspotsListActivity> = WeakReference(context)
-
-                override fun doInBackground(vararg param: Int?): String {
-                    Log.i("Requête: ", param.toString())
-                    return api.testUsingGET("Bonjour")
-                }
-
-                override fun onPostExecute(result: String?) {
-                    super.onPostExecute(result)
-                    val activity = activityReference.get()
-                    activity?.text_view?.text = result.let { it }
-                }
-            }
-        }*/
+    }
 }

@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import fr.wifinder_trinity.wifinderandroid.R
+import fr.wifinder.wifinderandroid.R
 
 class HotspotAdapter (private val hotspots: List<ScanResult>) : RecyclerView.Adapter<HotspotAdapter.MyViewHolder>() {
 
