@@ -21,8 +21,7 @@ package fr.wifinder.wifinderandroid.models
 data class HotspotInformation (
     val bssid: kotlin.String? = null,
     val ssid: kotlin.String? = null,
-    val strength: kotlin.Int? = null
-) {
-
-}
+    val strength: kotlin.Int? = null,
+    val frequency: kotlin.Int? = null
+)
 

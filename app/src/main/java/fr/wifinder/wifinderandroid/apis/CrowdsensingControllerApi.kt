@@ -11,12 +11,13 @@
 */
 package fr.wifinder.wifinderandroid.apis
 
+import fr.wifinder.wifinderandroid.activities.HotspotsListActivity
 import fr.wifinder.wifinderandroid.infrastructure.*
 import fr.wifinder.wifinderandroid.models.ConnectionInput
 import fr.wifinder.wifinderandroid.models.FindInput
 import fr.wifinder.wifinderandroid.models.FindOutput
 
-class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080") : ApiClient(basePath) {
+class CrowdsensingControllerApi(basePath: String = "http://35.180.192.129:8080", activity: HotspotsListActivity) : ApiClient(basePath, activity) {
     // TODO: Adapt the IP address of the server to the situation (phone, emulator...)
     /**
     * connect
@@ -39,14 +40,16 @@ class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080"
             localVariableBody
         )
 
-        return when (response.responseType) {
-            ResponseType.Success -> Unit
-            ResponseType.Informational -> TODO()
-            ResponseType.Redirection -> TODO()
-            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
-            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
-            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
-        }
+        return
+
+//        return when (response.responseType) {
+//            ResponseType.Success -> Unit
+//            ResponseType.Informational -> TODO()
+//            ResponseType.Redirection -> TODO()
+//            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
+//            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
+//            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
+//        }
     }
 
     /**
@@ -70,14 +73,16 @@ class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080"
             localVariableBody
         )
 
-        return when (response.responseType) {
-            ResponseType.Success -> Unit
-            ResponseType.Informational -> TODO()
-            ResponseType.Redirection -> TODO()
-            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
-            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
-            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
-        }
+        return
+
+//        return when (response.responseType) {
+//            ResponseType.Success -> Unit
+//            ResponseType.Informational -> TODO()
+//            ResponseType.Redirection -> TODO()
+//            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
+//            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
+//            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
+//        }
     }
 
     /**
@@ -87,7 +92,7 @@ class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080"
     * @return FindOutput
     */
     @Suppress("UNCHECKED_CAST")
-    fun findUsingPOST(input: FindInput) : FindOutput {
+    fun findUsingPOST(input: FindInput) : FindOutput? {
         val localVariableBody: kotlin.Any? = input
         val localVariableQuery: MultiValueMap = mapOf()
         val localVariableHeaders: kotlin.collections.Map<kotlin.String,kotlin.String> = mapOf()
@@ -101,15 +106,15 @@ class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080"
             localVariableConfig,
             localVariableBody
         )
-
-        return when (response.responseType) {
-            ResponseType.Success -> (response as Success<*>).data as FindOutput
-            ResponseType.Informational -> TODO()
-            ResponseType.Redirection -> TODO()
-            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
-            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
-            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
-        }
+        return null
+//        return when (response.responseType) {
+//            ResponseType.Success -> (response as Success<*>).data as FindOutput
+//            ResponseType.Informational -> TODO()
+//            ResponseType.Redirection -> TODO()
+//            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
+//            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
+//            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
+//        }
     }
 
     /**
@@ -119,7 +124,7 @@ class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080"
     * @return kotlin.String
     */
     @Suppress("UNCHECKED_CAST")
-    fun testUsingGET(text: kotlin.String) : kotlin.String {
+    fun testUsingGET(text: kotlin.String) : kotlin.String? {
         val localVariableBody: kotlin.Any? = null
         val localVariableQuery: MultiValueMap = mapOf()
         val localVariableHeaders: kotlin.collections.Map<kotlin.String,kotlin.String> = mapOf()
@@ -134,14 +139,16 @@ class CrowdsensingControllerApi(basePath: kotlin.String = "http://10.0.2.2:8080"
             localVariableBody
         )
 
-        return when (response.responseType) {
-            ResponseType.Success -> (response as Success<*>).data as kotlin.String
-            ResponseType.Informational -> TODO()
-            ResponseType.Redirection -> TODO()
-            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
-            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
-            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
-        }
+        return null
+
+//        return when (response.responseType) {
+//            ResponseType.Success -> (response as Success<*>).data as kotlin.String
+//            ResponseType.Informational -> TODO()
+//            ResponseType.Redirection -> TODO()
+//            ResponseType.ClientError -> throw ClientException((response as ClientError<*>).body as? String ?: "Client error")
+//            ResponseType.ServerError -> throw ServerException((response as ServerError<*>).message ?: "Server error")
+//            else -> throw kotlin.IllegalStateException("Undefined ResponseType.")
+//        }
     }
 
 }

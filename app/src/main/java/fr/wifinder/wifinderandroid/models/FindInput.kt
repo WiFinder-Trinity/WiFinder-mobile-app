@@ -21,7 +21,5 @@ data class FindInput (
         val hotspots: kotlin.Array<HotspotInformation>? = null,
         val latitude: kotlin.Double? = null,
         val longitude: kotlin.Double? = null
-) {
-
-}
+)
 

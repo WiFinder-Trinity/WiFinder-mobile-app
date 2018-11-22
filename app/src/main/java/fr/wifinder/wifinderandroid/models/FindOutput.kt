@@ -20,7 +20,5 @@ package fr.wifinder.wifinderandroid.models
 data class FindOutput (
     val bssid: kotlin.String? = null,
     val ssid: kotlin.String? = null
-) {
-
-}
+)
 
