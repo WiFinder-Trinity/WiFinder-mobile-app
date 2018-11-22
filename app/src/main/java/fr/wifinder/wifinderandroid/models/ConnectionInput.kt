@@ -18,7 +18,5 @@ package fr.wifinder.wifinderandroid.models
  */
 data class ConnectionInput (
     val bssid: kotlin.String? = null
-) {
-
-}
+)
 
