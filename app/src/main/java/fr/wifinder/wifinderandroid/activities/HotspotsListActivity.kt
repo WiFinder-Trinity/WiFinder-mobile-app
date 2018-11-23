@@ -16,6 +16,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import fr.wifinder.wifinderandroid.R
 import fr.wifinder.wifinderandroid.services.HotspotService
+import fr.wifinder.wifinderandroid.services.PermissionsService
 import java.util.*
 import java.util.logging.Logger
 
@@ -34,8 +35,9 @@ class HotspotsListActivity : AppCompatActivity() {
     private lateinit var scanButton: Button
     private lateinit var findButton: Button
 
+    //Services
     private val logger = Logger.getLogger(HotspotsListActivity::class.java.name)
-
+    private val permissionsService = PermissionsService(this)
     private val hs = HotspotService(this)
 
     // Data
@@ -69,11 +71,6 @@ class HotspotsListActivity : AppCompatActivity() {
         textView = findViewById(R.id.textInfo)
         textView.text = "Application starting ...."
 
-        //set List view
-        listView = findViewById(R.id.wifiList)
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, scanNames)
-        listView.adapter = adapter
-
         //set Scan Button
         scanButton = findViewById(R.id.scanBtn)
         scanButton.setOnClickListener { scanWifi() }
@@ -81,6 +78,16 @@ class HotspotsListActivity : AppCompatActivity() {
         //set Find Button
         findButton = findViewById(R.id.findBtn)
         findButton.setOnClickListener { callFindService() }
+
+        //set List view
+        listView = findViewById(R.id.wifiList)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, scanNames)
+        listView.adapter = adapter
+
+        //Ask permissions
+        permissionsService.askAccessWifiPermission()
+        permissionsService.askChangeWifiPermission()
+        permissionsService.askFineLocationPermission()
 
         //set Managers
         wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -99,7 +106,7 @@ class HotspotsListActivity : AppCompatActivity() {
     fun scanWifi() {
         scanNames.clear()
         registerReceiver(wifiScanReceiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-        Toast.makeText(this, "Scanning Wifi ....", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Scanning Wifi ...", Toast.LENGTH_SHORT).show()
         val success = wifiManager.startScan()
 
         if (!success)
